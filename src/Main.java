@@ -2,42 +2,54 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static int key;
-    public static String message;
-    public static String encryptedMessage;
     public static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        InsertKey();
-        InsertMessage();
-        EncryptMessage();
-        PrintEncryptedMessage();
+        int key;
+        int choice;
+        String message;
+        String modifiedMessage;
+
+        key = GetKey();
+        message = GetMessage();
+        choice = GetChoice();
+        modifiedMessage = GetOutputMessage(key, message, choice);
+        PrintMessage(modifiedMessage);
     }
 
-    private static void InsertKey() {
-        key = Integer.parseInt(sc.nextLine());
+    private static int GetKey() {
+        System.out.println("Enter a key: ");
+        return Integer.parseInt(sc.nextLine());
     }
 
-    private static void InsertMessage() {
-        message = sc.nextLine();
+    private static String GetMessage() {
+        System.out.println("Enter a message: ");
+        return sc.nextLine();
     }
 
-    private static void EncryptMessage() {
+    private static int GetChoice() {
+        System.out.println("Decrypt(0) or Encrypt(1): ");
+        return Integer.parseInt(sc.next());
+    }
+
+    private static String GetOutputMessage(int key, String encryptedMessage, int k) {
         char[] splittedKey = String.valueOf(key).toCharArray();
-        char[] splittedMessage = message.toCharArray();
+        char[] splittedMessage = encryptedMessage.toCharArray();
         StringBuilder sb = new StringBuilder();
+
+        char messageChar;
 
         for (int i = 0; i < splittedMessage.length; i++) {
             int index = i % splittedKey.length;
-            char encryptedChar = (char)(splittedMessage[i] + Character.getNumericValue(splittedKey[index]));
-            sb.append(encryptedChar);
+            if(k == 0) messageChar = (char)(splittedMessage[i] - Character.getNumericValue(splittedKey[index]));
+            else messageChar = (char)(splittedMessage[i] + Character.getNumericValue(splittedKey[index]));
+            sb.append(messageChar);
         }
 
-        encryptedMessage = sb.toString();
+        return sb.toString();
     }
 
-
-    private static void PrintEncryptedMessage() {
-        System.out.println("Encrypted Message: " + encryptedMessage);
+    private static void PrintMessage(String modifiedMessage) {
+        System.out.println("Output Message: " + modifiedMessage);
     }
 }
